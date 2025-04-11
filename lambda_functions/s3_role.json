@@ -1,0 +1,26 @@
+/*Política adcionada ao bucket s3 para conceder os acessos à função lambda de ingestão*/
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::XXXXXXXXXXX:role/service-role/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/*"
+        },
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::XXXXXXXXXXX:role/service-role/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": "arn:aws:s3:::XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*"
+        }
+    ]
+}
