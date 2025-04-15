@@ -101,8 +101,8 @@ for assunto in assuntos:
               from tb_{assunto}_dedup_02
         """)
               
+        df.write.mode('append').parquet('s3://data-lake-varejo-905418122144/05_controle/refined/')      
         print(f"Dados da tabela '{assunto}' salvos com sucesso.")
-        df.show(truncate=False)
 
     except Exception as e:
         print(f"Erro ao processar '{assunto}': {str(e)}")
