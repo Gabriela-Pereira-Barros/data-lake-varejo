@@ -90,3 +90,73 @@ Instalar boto3:
 ```bash
 pip install boto3
 ```
+
+### Configurar instância para que o airflow inicie aumtomaticamente ao ligar a instância
+
+Executar os comandos dentro da instância:
+
+Criar script para a inicialização:
+```bash
+sudo nano /home/ubuntu/start_airflow.sh
+```
+
+Conteúdo do script:
+```bash
+#!/bin/bash
+export AIRFLOW_HOME=/home/ubuntu/airflow
+source /home/ubuntu/miniconda3/bin/activate airflow_env
+airflow scheduler -D
+exec airflow webserver --port 8080
+```
+
+Tornar o script executável:
+```bash
+sudo chmod +x /home/ubuntu/start_airflow.sh
+```
+
+Testar script:
+```bash
+bash /home/ubuntu/start_airflow.sh
+```
+
+Criar um arquivo de serviço systemd
+```bash
+sudo nano /etc/systemd/system/airflow.service
+```
+
+Conteúdo do arquivo:
+```bash
+[Unit]
+Description=Airflow webserver and scheduler
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu
+Environment="AIRFLOW_HOME=/home/ubuntu/airflow"
+Environment="PATH=/home/ubuntu/miniconda3/envs/airflow_env/bin:/home/ubuntu/miniconda3/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=/home/ubuntu/start_airflow.sh
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Habilitar o serviço:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable airflow.service
+```
+
+Iniciar o serviço para testá-lo:
+```bash
+sudo systemctl start airflow.service
+```
+
+Verificar o status do serviço (para confirmar que está funcionando):
+```bash
+sudo systemctl status airflow.service
+```
