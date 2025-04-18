@@ -43,7 +43,7 @@ tb_dia_compra = spark.sql("""
     , currency
     , transaction_type
     , payment_method
-    , invoice_total
+    , line_total
     , case
         when dayofweek(date) = 1 then 'DOMINGO'
         when dayofweek(date) = 2 then 'SEGUNDA'
@@ -139,7 +139,7 @@ stage = spark.sql(f"""
     , fbc_moeda
     , flg_desconto
     , flg_retorno
-    , invoice_total as fvl_invoice_total
+    , line_total as fvl_invoice_total
     , case when rn = 1 then 1 else null end fvl_qtd_transacoes
     , 1 as fvl_qtd_itens_transacao
   from tb_qtd_transacoes
